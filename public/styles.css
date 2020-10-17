@@ -74,6 +74,7 @@ html, body {
 
 .content-section {
     margin: 1em;
+    
 }
 
 .container {
@@ -338,3 +339,85 @@ html, body {
     margin: 40px auto 80px auto;
     font-size: 1.75em;
 }
+
+/* .adyen-checkout__button--pay {
+    background-color: #0abf53;
+    font-weight: 900;
+    border-radius: 0;
+} */
+
+
+
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .checkout {
+    display: flex;
+      flex-direction: column;
+    }
+} 
+
+
+
+ 
+
+
+/*Modal
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  /* Modal Header */
+.modal-header {
+    padding: 1.4rem;
+    color: white;
+    height: 15px;
+  }
+  
+  /* Modal Body */
+  /* .modal-body {
+      padding: 2px 16px;
+    }
+   */
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    
+    padding: 3px;
+    /* padding-top: 20px; */
+    border: 1px solid #888;
+    border-radius: 15px;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+.close {
+    padding-top: 1px;
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .spacer{
+      visibility: hidden;
+  }

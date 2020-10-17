@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Generics | Store</title>
+        <meta name="description" content="This is the description">
+        <link rel="stylesheet" href="styles.css" />
+        <link 
+            rel="stylesheet"
+            href="https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.14.1/adyen.css"
+            integrity="sha384-dNVP3hcwQ/DJnbhWtKjt/xpYSDyS1Ch8m8tnxNehvZoGzcrjeGuKk9/dGstY+vxu"
+            crossorigin="anonymous">
+        <script 
+            src="https://checkoutshopper-live.adyen.com/checkoutshopper/sdk/3.14.1/adyen.js"
+            integrity="sha384-6CKCjdBJ5e8ODBkoPb8aS4NUVZUT84+EwcOq/EdHIQJsHXZyRy4Hzmlo3Cm/3VX3"
+            crossorigin="anonymous"
+            defer></script>
+        <script> var adyenClientKey = '<%=adyenClientKey %>'</script>
+        <script src="store.js" defer></script>
+    </head>
+    </head>
+    <body>
+            <header class="main-header">
+                <nav class="main-nav nav">
+                    <ul>
+                        <li><a href="index.html">HOME</a></li>
+                        <li><a href="store">STORE</a></li>
+                        <li><a href="about.html">ABOUT</a></li>
+                    </ul>
+                </nav>
+                <h1 class="band-name band-name-large">The Generics</h1>
+            </header>
+            <section class="container content-section">
+                <h2 class="section-header">MUSIC</h2>
+                <div class="shop-items">
+                    <% items.music.forEach(function(item){ %>
+                        <div class="shop-item" data-item-id="<%= item.id %>">
+                            <span class="shop-item-title"><%= item.name %></span>
+                            <img class="shop-item-image" src="Images/<%= item.imgName %>">
+                            <div class="shop-item-details">
+                                <span class="shop-item-price">$<%= item.price / 100 %></span>
+                                <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+            <section class="container content-section">
+                <h2 class="section-header">MERCH</h2>
+                <div class="shop-items">
+                    <% items.merch.forEach(function(item){ %>
+                        <div class="shop-item" data-item-id="<%= item.id %>">
+                            <span class="shop-item-title"><%= item.name %></span>
+                            <img class="shop-item-image" src="Images/<%= item.imgName %>">
+                            <div class="shop-item-details">
+                                <span class="shop-item-price">$<%= item.price / 100 %></span>
+                                <button id="id="myBtn"" class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+            <div class="checkout">
+
+                    <!-- <div id="dropin-container"></div> -->
+                    
+                <!-- The Modal -->
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <p class="spacer">.</p>
+                    </div>
+                    <div class="modal-body">
+                        <div id="dropin-container"></div>
+                    </div>
+        
+                    </div>
+            </div>
+
+            
+
+            
+
+
+                    <section class="container content-section">
+                            <h2 class="section-header">CART</h2>
+                            <div class="cart-row">
+                                <span class="cart-item cart-header cart-column">ITEM</span>
+                                <span class="cart-price cart-header cart-column">PRICE</span>
+                                <span class="cart-quantity cart-header cart-column">QUANTITY</span>
+                            </div>
+                            <div class="cart-items">
+                            </div>
+                            <div class="cart-total">
+                                <strong class="cart-total-title">Total</strong>
+                                <span class="cart-total-price">$0</span>
+                            </div>
+                            <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
+                        </section>
+
+            </div>
+            
+            <footer class="main-footer">
+                <div class="container main-footer-container">
+                    <h3 class="band-name">The Generics</h3>
+                    <ul class="nav footer-nav">
+                        <li>
+                            <a href="https://www.youtube.com" target="_blank">
+                                <img src="Images/YouTube Logo.png">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.spotify.com" target="_blank">
+                                <img src="Images/Spotify Logo.png">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.facebook.com" target="_blank">
+                                <img src="Images/Facebook Logo.png">
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </footer>
+        </body>
+</html>
