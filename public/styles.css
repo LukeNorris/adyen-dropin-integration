@@ -9,6 +9,8 @@
     font-style: normal;
 }
 
+
+
 * {
     box-sizing: border-box;
     font-family: Raleway;
@@ -340,11 +342,6 @@ html, body {
     font-size: 1.75em;
 }
 
-/* .adyen-checkout__button--pay {
-    background-color: #0abf53;
-    font-weight: 900;
-    border-radius: 0;
-} */
 
 
 
@@ -471,3 +468,17 @@ html, body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+ 
+  .adyen-checkout__button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  .adyen-checkout__button--pay {
+    background-color: #ffc629;
+    margin: auto;
+    width: 40%;
+    font-weight: 900;
+    border-radius: 6px;
+}

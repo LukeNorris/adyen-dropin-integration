@@ -51,7 +51,7 @@ function makePayment (data){
         })
     }
 
-    fetch('/makepayment', {
+    return fetch('/makepayment', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -64,12 +64,11 @@ function makePayment (data){
     }).then(res => {
         return res.json()
     }).then(info => {
-        console.log('before',info)
+        // console.log('before',info)
         return info
-    }).catch(function(error) {
+    }).catch(error => {
         console.error(error)
-    })
- console.log('after',info) 
+    }) 
 }
    
 
@@ -185,8 +184,13 @@ window.onclick = function(event) {
 
 
 function purchaseClicked() {
-    modal.style.display = "block";
-    adyenHandler()
+    let total = document.getElementsByClassName('cart-total-price')[0].innerText
+    if(total == '$0'){
+        alert('Please add some items to the cart')
+    } else {
+        modal.style.display = "block";
+        adyenHandler()
+    }
 }
 
 function modalMsg () {  
@@ -275,5 +279,3 @@ function updateCartTotal() {
     total = Math.round(total * 100) / 100
     document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total
 }
-
-
