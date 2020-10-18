@@ -108,6 +108,7 @@ function adyenHandler (){
             environment: "test",
             onSubmit: (state, dropin) => {
                 // Your function calling your server to make the `/payments` request
+                modalMsg()
                 makePayment(state.data)
                   .then(response => {
                       console.log(response)
@@ -161,20 +162,43 @@ function adyenHandler (){
     })
 }
 
+// var priceElement = document.getElementsByClassName('cart-total-price')[0]
+// var price = parseFloat(priceElement.innerText.replace('$', '')) * 100
 
 
+
+
+
+var modal = document.getElementById("myModal");
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 
 
 function purchaseClicked() {
-    // var priceElement = document.getElementsByClassName('cart-total-price')[0]
-    // var price = parseFloat(priceElement.innerText.replace('$', '')) * 100
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
     modal.style.display = "block";
     adyenHandler()
 }
 
+function modalMsg () {  
+    document.getElementById('process').style.display = 'block' 
+    document.getElementById('dropin-container').style.display = 'none'
+    span.style.display ='none'
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "block";
+        }
+    }  
+}
 
 
 // var cartItems = document.getElementsByClassName('cart-items')[0]
@@ -253,18 +277,3 @@ function updateCartTotal() {
 }
 
 
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-  }
-  
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target != modal) {
-      modal.style.display = "none";
-    }
-  }
