@@ -22,7 +22,6 @@ function ready() {
         var button = addToCartButtons[i]
         button.addEventListener('click', addToCartClicked)
     }
-
     document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
@@ -31,8 +30,7 @@ function showFinalResult (response) {
         paymentSuccessMsg()
     } else {
         alert('There was an issue processing you payment')
-    }
-   
+    } 
 }
 
 
@@ -132,7 +130,6 @@ function adyenHandler (){
                       dropin.handleAction(response.action);
                     } else {
                       // Your function to show the final result to the shopper
-                      
                       showFinalResult(response);
                     }
                   })
@@ -174,22 +171,24 @@ var span = document.getElementsByClassName("close")[0];
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
-    var cleanup = function () {
-        var newElement = document.createElement('div')
-        newElement.id = 'dropin-container'
-        var element = document.getElementById('dropin-container');
-        element.parentNode.replaceChild( newElement, element);
-    }
-    cleanup();
+    cleanup();  
 }
-
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
+        cleanup();
     }
 }
+
+var cleanup = function () {
+    var newElement = document.createElement('div')
+    newElement.id = 'dropin-container'
+    var element = document.getElementById('dropin-container');
+    element.parentNode.replaceChild( newElement, element);
+}
+
 
 
 function purchaseClicked() {
@@ -226,7 +225,7 @@ function paymentSuccessMsg (){
     }  
     setTimeout(() => {      
         window.location = 'http://localhost:5000'      
-    }, 3000);    
+    }, 4000);    
 }
 
 
