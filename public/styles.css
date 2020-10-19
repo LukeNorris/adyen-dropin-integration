@@ -457,6 +457,13 @@ html, body {
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
   }
+  .paymentSuccess {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+  }
   
   /* Safari */
   @-webkit-keyframes spin {

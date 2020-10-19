@@ -26,14 +26,14 @@ function ready() {
     document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
-// function showFinalResult (response) {
-//     alert('Thank you. Your payment was successfully proccessed.')
-//     // var cartItems = document.getElementsByClassName('cart-items')[0]
-//     // while (cartItems.hasChildNodes()) {
-//     //     cartItems.removeChild(cartItems.firstChild)
-//     // }
-//     // updateCartTotal()
-// }
+function showFinalResult (response) {
+    if(response.resultCode = "Authorised'"){
+        paymentSuccessMsg()
+    } else {
+        alert('There was an issue processing you payment')
+    }
+   
+}
 
 
 function makePayment (data){
@@ -105,9 +105,12 @@ function adyenHandler (){
             clientKey: adyenClientKey, // Web Drop-in versions before 3.10.1 use originKey instead of clientKey.
             locale: "en-US",
             environment: "test",
+            removeInstance: () => {
+
+            },
             onSubmit: (state, dropin) => {
                 // Your function calling your server to make the `/payments` request
-                modalMsg()
+                processingPaymentMsg()
                 makePayment(state.data)
                   .then(response => {
                       console.log(response)
@@ -116,8 +119,7 @@ function adyenHandler (){
                       dropin.handleAction(response.action);
                     } else {
                       // Your function to show the final result to the shopper
-                      alert(`Your payment has been successfully proccessed.`)
-                    //   showFinalResult(response);
+                      showFinalResult(response);
                     }
                   })
                   .catch(error => {
@@ -147,7 +149,8 @@ function adyenHandler (){
                   holderNameRequired: true,
                   enableStoreDetails: true,
                   hideCVC: false, // Change this to true to hide the CVC field for stored cards
-                  name: 'Credit or debit card'
+                  name: 'Credit or debit card',
+                  billingAddressRequired: true
                 }
               }
         
@@ -166,15 +169,20 @@ function adyenHandler (){
 
 
 
-
-
 var modal = document.getElementById("myModal");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
+    // var cleanup = function () {
+    //     //   var element = document.getElementById('dropin-container');
+    //     //     element.parentNode.removeChild(element);
+  
+    // cleanup();
 }
+
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
@@ -193,9 +201,12 @@ function purchaseClicked() {
     }
 }
 
-function modalMsg () {  
+function processingPaymentMsg () {  
+// function modalMsg () {  
     document.getElementById('process').style.display = 'block' 
     document.getElementById('dropin-container').style.display = 'none'
+    document.getElementById('paymentSuccess').style.display = 'none'
+
     span.style.display ='none'
     window.onclick = function(event) {
         if (event.target == modal) {
@@ -203,6 +214,28 @@ function modalMsg () {
         }
     }  
 }
+
+function paymentSuccessMsg (){
+
+    document.getElementById('process').style.display = 'none' 
+    document.getElementById('dropin-container').style.display = 'none'
+    document.getElementById('paymentSuccess').style.display = 'block'
+
+    span.style.display ='none'
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "block";
+        }
+    }  
+    setTimeout(() => {
+       
+        window.location = 'http://localhost:5000'
+        
+    }, 3000);
+    
+}
+
+
 
 
 // var cartItems = document.getElementsByClassName('cart-items')[0]
