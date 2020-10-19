@@ -105,9 +105,6 @@ function adyenHandler (){
             clientKey: adyenClientKey, // Web Drop-in versions before 3.10.1 use originKey instead of clientKey.
             locale: "en-US",
             environment: "test",
-            removeInstance: () => {
-
-            },
             onSubmit: (state, dropin) => {
                 // Your function calling your server to make the `/payments` request
                 processingPaymentMsg()
@@ -177,11 +174,13 @@ var span = document.getElementsByClassName("close")[0];
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
-    // var cleanup = function () {
-    //     //   var element = document.getElementById('dropin-container');
-    //     //     element.parentNode.removeChild(element);
-  
-    // cleanup();
+    var cleanup = function () {
+        var newElement = document.createElement('div')
+        newElement.id = 'dropin-container'
+        var element = document.getElementById('dropin-container');
+        element.parentNode.replaceChild( newElement, element);
+    }
+    cleanup();
 }
 
 
