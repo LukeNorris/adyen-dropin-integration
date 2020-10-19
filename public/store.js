@@ -170,6 +170,8 @@ function adyenHandler (){
 
 
 var modal = document.getElementById("myModal");
+document.getElementById('paymentSuccess').style.display = 'none'
+
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 // When the user clicks on <span> (x), close the modal
@@ -202,11 +204,9 @@ function purchaseClicked() {
 }
 
 function processingPaymentMsg () {  
-// function modalMsg () {  
     document.getElementById('process').style.display = 'block' 
     document.getElementById('dropin-container').style.display = 'none'
     document.getElementById('paymentSuccess').style.display = 'none'
-
     span.style.display ='none'
     window.onclick = function(event) {
         if (event.target == modal) {
@@ -216,23 +216,18 @@ function processingPaymentMsg () {
 }
 
 function paymentSuccessMsg (){
-
     document.getElementById('process').style.display = 'none' 
     document.getElementById('dropin-container').style.display = 'none'
     document.getElementById('paymentSuccess').style.display = 'block'
-
     span.style.display ='none'
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "block";
         }
     }  
-    setTimeout(() => {
-       
-        window.location = 'http://localhost:5000'
-        
-    }, 3000);
-    
+    setTimeout(() => {      
+        window.location = 'http://localhost:5000'      
+    }, 3000);    
 }
 
 
