@@ -91,7 +91,12 @@ app.post('/makePayment', (req, res) => {
                 return total = total + itemJson.price * item.quantity
             })
 
-            const paymentMethod = req.body.data.paymentMethod
+            console.log(req.body.data)
+            const { paymentMethod, browserInfo, billingAddress } = req.body.data
+
+            // const paymentMethod = req.body.data.paymentMethod
+            // const browserInfo = req.body.data.browserInfo
+            // const billingAddress = req.body.data.billingAddress
             const paymentRequestParams = {
                 merchantAccount: merchantName,
                 amount:{
@@ -102,7 +107,13 @@ app.post('/makePayment', (req, res) => {
                 reference:  'luke_checkoutChallenge',
                 returnUrl: 'http://localhost:5000',
                 channel: "Web",
-                countryCode: "NL"
+                countryCode: "NL",
+                //3d secure parameters
+                origin: 'http://localhost:5000/store' ,
+                browserInfo: browserInfo,
+                billingAddress: billingAddress,
+                //shopperIP: 
+
             }  
             const paymentHeaders = {
                 "Content-Type": "application/json",
