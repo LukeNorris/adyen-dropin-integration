@@ -73,7 +73,6 @@ function makePayment (data){
 }
    
 
-
 function adyenHandler (){
     let items = itemsArray()
     fetch('/purchase', {
@@ -150,14 +149,19 @@ function adyenHandler (){
 // var priceElement = document.getElementsByClassName('cart-total-price')[0]
 // var price = parseFloat(priceElement.innerText.replace('$', '')) * 100
 
-
+//Cleanup removes instance of dropin when modakl is closed - to avoid conflicts 
+var cleanup = function () {
+    var newElement = document.createElement('div')
+    newElement.id = 'dropin-container'
+    var element = document.getElementById('dropin-container');
+    element.parentNode.replaceChild( newElement, element);
+}
 
 var modal = document.getElementById("myModal");
 document.getElementById('paymentSuccess').style.display = 'none'
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
 // When the user clicks on <span> (x), close the modal
+var span = document.getElementsByClassName("close")[0];
 span.onclick = function() {
     modal.style.display = "none";
     cleanup();  
@@ -170,14 +174,6 @@ window.onclick = function(event) {
         cleanup();
     }
 }
-
-var cleanup = function () {
-    var newElement = document.createElement('div')
-    newElement.id = 'dropin-container'
-    var element = document.getElementById('dropin-container');
-    element.parentNode.replaceChild( newElement, element);
-}
-
 
 
 function purchaseClicked() {
