@@ -63,9 +63,8 @@
             </section>
             <div class="checkout">
                     
-                <!-- The Modal -->
+                <!-- The Adyen popup -->
             <div id="myModal" class="modal">
-                <!-- Modal content -->
                 <div class="modal-content">
                     <div class="modal-header">
                         <span class="close">&times;</span>
@@ -81,9 +80,31 @@
                         </div> 
                         <div id="paymentSuccess">                              
                             <div class="paymentSuccessMsg">
-                                <p>Thank you your payment was successful</p>
+                                <p>Thank you your payment was successful! You will receive an email soon with the order confirmation</p>
                             </div>
-                        </div>                        
+                        </div> 
+                        <div id="paymentCancelled">                              
+                            <div class="paymentCancelledMsg">
+                                <p>You cancelled the payment. Would you like to continue with the order and select a different payment method?</p>
+
+                            </div>
+                        </div>
+                        <div id="paymentError">                              
+                            <div class="paymentErrorMsg">
+                                <p>There was an error when the payment was being processed.</p>
+                            </div>
+                        </div>
+                        <div id="paymentRefused">                              
+                                <div class="paymentRefusedMsg">
+                                    <p>We could not process your payment. Please try a different payment method.</p>
+                                </div>
+                            </div>  
+                        <div id="paymentTimeout">                              
+                            <div class="paymentTimeoutMsg">
+                                <p>I'm sorry, it seems there are connection problems. Please try again.</p>
+                            </div>
+                        </div>  
+                                                
                     </div>
                 </div>
             </div>

@@ -25,13 +25,8 @@ function ready() {
     document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
-function showFinalResult (response) {
-    if(response.resultCode = "Authorised'"){
-        paymentSuccessMsg()
-    } else {
-        alert('There was an issue processing you payment')
-    } 
-}
+
+
 
 
 function itemsArray (){
@@ -146,10 +141,8 @@ function adyenHandler (){
     })
 }
 
-// var priceElement = document.getElementsByClassName('cart-total-price')[0]
-// var price = parseFloat(priceElement.innerText.replace('$', '')) * 100
 
-//Cleanup removes instance of dropin when modakl is closed - to avoid conflicts 
+//Cleanup removes instance of dropin when modal is closed - to avoid conflicts 
 var cleanup = function () {
     var newElement = document.createElement('div')
     newElement.id = 'dropin-container'
@@ -159,6 +152,10 @@ var cleanup = function () {
 
 var modal = document.getElementById("myModal");
 document.getElementById('paymentSuccess').style.display = 'none'
+document.getElementById('paymentCancelled').style.display = 'none'
+document.getElementById('paymentError').style.display = 'none'
+document.getElementById('paymentRefused').style.display = 'none'
+document.getElementById('paymentTimeout').style.display = 'none'
 
 // When the user clicks on <span> (x), close the modal
 var span = document.getElementsByClassName("close")[0];
@@ -167,7 +164,7 @@ span.onclick = function() {
     cleanup();  
 }
 
-// When the user clicks anywhere outside of the modal, close it
+// When the user clicks anywhere outside of the modal content, close it
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
@@ -190,37 +187,51 @@ function processingPaymentMsg () {
     document.getElementById('process').style.display = 'block' 
     document.getElementById('dropin-container').style.display = 'none'
     document.getElementById('paymentSuccess').style.display = 'none'
-    span.style.display ='none'
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "block";
-        }
-    }  
+    makeScreenUnclickable()
 }
 
-function paymentSuccessMsg (){
+function showFinalResult (response) {
     document.getElementById('process').style.display = 'none' 
     document.getElementById('dropin-container').style.display = 'none'
-    document.getElementById('paymentSuccess').style.display = 'block'
+    switch(response.resultCode) {
+        case "Authorised":
+            document.getElementById('paymentSuccess').style.display = 'block'
+          break;
+        case "Cancelled":
+            document.getElementById('paymentCancelled').style.display = 'block'
+          break;
+          case "Error":
+            document.getElementById('paymentError').style.display = 'block'
+          break;
+          case "Refused":
+            document.getElementById('paymentRefused').style.display = 'block'
+          break;
+        default:
+            document.getElementById('paymentTimeout').style.display = 'block'
+      }
+    makeScreenUnclickable()
+    messageTimeout()         
+} 
+
+
+
+
+function makeScreenUnclickable() {
     span.style.display ='none'
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "block";
         }
     }  
-    setTimeout(() => {      
-        window.location = 'http://localhost:5000'      
-    }, 4000);    
 }
 
 
+function messageTimeout () {
+    setTimeout(() => {      
+        window.location = 'http://localhost:5000'      
+    }, 6000); 
+}
 
-
-// var cartItems = document.getElementsByClassName('cart-items')[0]
-// while (cartItems.hasChildNodes()) {
-//     cartItems.removeChild(cartItems.firstChild)
-// }
-// updateCartTotal()
 
 function removeCartItem(event) {
     var buttonClicked = event.target
@@ -290,3 +301,4 @@ function updateCartTotal() {
     total = Math.round(total * 100) / 100
     document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total
 }
+

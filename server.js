@@ -21,6 +21,7 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
 app.use(express.json())
+app.set('trust proxy', true)
 
 
 app.get('/store', (req, res) => {
@@ -91,7 +92,12 @@ app.post('/makePayment', (req, res) => {
                 return total = total + itemJson.price * item.quantity
             })
 
-            
+            const ip = (
+                req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||(req.connection.socket ? req.connection.socket.remoteAddress : null)
+            );
+
             const { paymentMethod, browserInfo, billingAddress } = req.body.data
             const paymentRequestParams = {
                 merchantAccount: merchantName,
@@ -108,8 +114,7 @@ app.post('/makePayment', (req, res) => {
                 origin: 'http://localhost:5000/store' ,
                 browserInfo: browserInfo,
                 billingAddress: billingAddress,
-                //shopperIP: 
-
+                shopperIP: ip
             }  
             const paymentHeaders = {
                 "Content-Type": "application/json",
