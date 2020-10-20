@@ -91,12 +91,8 @@ app.post('/makePayment', (req, res) => {
                 return total = total + itemJson.price * item.quantity
             })
 
-            console.log(req.body.data)
+            
             const { paymentMethod, browserInfo, billingAddress } = req.body.data
-
-            // const paymentMethod = req.body.data.paymentMethod
-            // const browserInfo = req.body.data.browserInfo
-            // const billingAddress = req.body.data.billingAddress
             const paymentRequestParams = {
                 merchantAccount: merchantName,
                 amount:{

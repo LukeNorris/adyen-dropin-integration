@@ -34,8 +34,8 @@ function showFinalResult (response) {
 }
 
 
-function makePayment (data){
-    var items = []
+function itemsArray (){
+    var itemsArray = []
     var cartItemContainer = document.getElementsByClassName('cart-items')[0]
     var cartRows = cartItemContainer.getElementsByClassName('cart-row')
     for( let i = 0; i < cartRows.length; i++ ) {
@@ -43,12 +43,16 @@ function makePayment (data){
         const quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
         const quantity = quantityElement.value
         var id = cartRow.dataset.itemId
-        items.push({
+        itemsArray.push({
             id:id,
             quantity: quantity
         })
     }
+    return itemsArray
+}
 
+function makePayment (data){
+    let items = itemsArray()
     return fetch('/makepayment', {
         method: 'POST',
         headers: {
@@ -62,7 +66,6 @@ function makePayment (data){
     }).then(res => {
         return res.json()
     }).then(info => {
-        // console.log('before',info)
         return info
     }).catch(error => {
         console.error(error)
@@ -72,20 +75,7 @@ function makePayment (data){
 
 
 function adyenHandler (){
-    var items = []
-    var cartItemContainer = document.getElementsByClassName('cart-items')[0]
-    var cartRows = cartItemContainer.getElementsByClassName('cart-row')
-    for( let i = 0; i < cartRows.length; i++ ) {
-        const cartRow = cartRows[i]
-        const quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
-        const quantity = quantityElement.value
-        var id = cartRow.dataset.itemId
-        items.push({
-            id:id,
-            quantity: quantity
-        })
-    }
-
+    let items = itemsArray()
     fetch('/purchase', {
         method: 'POST',
         headers: {
@@ -108,7 +98,6 @@ function adyenHandler (){
                 processingPaymentMsg()
                 makePayment(state.data)
                   .then(response => {
-                      console.log(response)
                     if (response.action) {
                       // Drop-in handles the action object from the /payments response
                       dropin.handleAction(response.action);
