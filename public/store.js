@@ -66,9 +66,10 @@ function makePayment (data){
         console.error(error)
     }) 
 }
-   
 
-function adyenHandler (){
+
+
+function adyenHandler (price){
     let items = itemsArray()
     fetch('/purchase', {
         method: 'POST',
@@ -127,7 +128,8 @@ function adyenHandler (){
                   enableStoreDetails: true,
                   hideCVC: false, // Change this to true to hide the CVC field for stored cards
                   name: 'Credit or debit card',
-                  billingAddressRequired: true
+                  billingAddressRequired: true,
+                  amount: { value: price, currency: 'EUR' }
                 }
               }
         
@@ -174,12 +176,14 @@ window.onclick = function(event) {
 
 
 function purchaseClicked() {
+    var priceElement = document.getElementsByClassName('cart-total-price')[0]
+    var price = parseFloat(priceElement.innerText.replace('$', '')) * 100
     let total = document.getElementsByClassName('cart-total-price')[0].innerText
     if(total == '$0'){
         alert('Please add some items to the cart')
     } else {
         modal.style.display = "block";
-        adyenHandler()
+        adyenHandler(price)
     }
 }
 
