@@ -117,7 +117,7 @@ app.post('/makePayment', (req, res) => {
                 },
                 paymentMethod: paymentMethod,
                 reference:  'luke_checkoutChallenge',
-                returnUrl: 'http://localhost:5000/store',
+                returnUrl: 'http://localhost:5000/confirmation',
                 channel: "Web",
                 countryCode: "NL",
                 origin: 'http://localhost:5000/store' ,
@@ -152,7 +152,7 @@ app.post('/makePayment', (req, res) => {
 
 
 //after 3DS redierect
-app.post('/store', (req, res) => {
+app.post('/confirmation', (req, res) => {
     const MD = req.body.MD;
     const PaRes = req.body.PaRes;
     const pdata =  fs.readFileSync("paymentData-luke_checkoutChallenge.json", 'utf-8', (error, data) => {
@@ -174,18 +174,11 @@ app.post('/store', (req, res) => {
     axios.post( paymentDetailsURL, detailparams, {
         headers: headers
     }).then(response => {
+        const result = response.data.resultCode
         console.log(response.data.resultCode)
-        fs.readFile('items.json', function(error, data){
-            if(error) {
-                res.status(500).end()
-            } else {
-                res.render('confirmation.ejs', {
-                    adyenClientKey: adyenClientKey,
-                    items: JSON.parse(data)
-                })
-            }
-        })
-            
+        res.render('confirmation.ejs', {
+                    result: result
+        })     
     }).catch(error => {
             console.log(error, 'charge fail');
      });

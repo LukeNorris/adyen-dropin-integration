@@ -137,6 +137,7 @@ function adyenHandler (price){
         
         const checkout = new AdyenCheckout(configuration);
         const dropin = checkout.create('dropin').mount('#dropin-container');
+        
         checkout.createFromAction(action).mount('#my-container');
 
     }).catch(function(error) {
