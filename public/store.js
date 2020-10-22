@@ -85,7 +85,7 @@ function adyenHandler (price){
     }).then(data => {
         const configuration = {
             paymentMethodsResponse: data, // The `/paymentMethods` response from the server.
-            clientKey: adyenClientKey, // Web Drop-in versions before 3.10.1 use originKey instead of clientKey.
+            clientKey: adyenClientKey, 
             locale: "en-US",
             environment: "test",
             onSubmit: (state, dropin) => {
@@ -138,7 +138,6 @@ function adyenHandler (price){
         const checkout = new AdyenCheckout(configuration);
         const dropin = checkout.create('dropin').mount('#dropin-container');
         
-        checkout.createFromAction(action).mount('#my-container');
 
     }).catch(function(error) {
         console.error(error)
@@ -221,7 +220,6 @@ function showFinalResult (response) {
 
 
 
-
 function makeScreenUnclickable() {
     span.style.display ='none'
     window.onclick = function(event) {
@@ -235,7 +233,7 @@ function makeScreenUnclickable() {
 function messageTimeout () {
     setTimeout(() => {      
         window.location = 'http://localhost:5000'      
-    }, 6000); 
+    }, 5000); 
 }
 
 

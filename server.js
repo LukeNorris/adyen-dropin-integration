@@ -71,7 +71,6 @@ app.post('/purchase', (req, res) => {
                 countryCode: "NL"
             }  
            
-
             axios.post( paymentMethodsURL, customerInfo, {
                 headers: headers
             }).then(response => {
