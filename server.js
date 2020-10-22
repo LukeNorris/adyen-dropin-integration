@@ -186,7 +186,7 @@ app.post('/makePayment', (req, res) => {
             }).then(response => {
                 if(response.data.action){
                     fs.writeFile(`paymentData-${paymentRequestParams.reference}.json`, 
-                    response.data.action.paymentData, 
+                    JSON.stringify(response.data.action.paymentData), 
                     function(err) {
                         if (err) {
                             console.log(err);
@@ -210,35 +210,48 @@ app.post('/makePayment', (req, res) => {
 app.post('/store', (req, res) => {
     const MD = req.body.MD;
     const PaRes = req.body.PaRes;
-    const dta =  fs.readFileSync("paymentData-luke_checkoutChallenge.json", 'utf-8', (error, dta) => {
+    const pdata =  fs.readFileSync("paymentData-luke_checkoutChallenge.json", 'utf-8', (error, data) => {
         if(error) {
             res.status(500).end()
         } else {
-            return JSON.parse(dta)
+            return data
         }
     })
     
-    // const paymentData = dta.substr(0,dta.length -1)
+    const paymentData = pdata.replace(/["]+/g, '')
+
        
     const paymentDetailsRequestParams = {
-        details: { MD: MD, PaRes: PaRes },
-        paymentData: dta
+        paymentData: paymentData,
+        details: { MD: MD, PaRes: PaRes }
     }
+    // const reqParam = JSON.parse(paymentDetailsRequestParams)
+
+    const detailparams = JSON.stringify(paymentDetailsRequestParams)
 
     
-
     
-    
-    axios.post( paymentDetailsURL, paymentDetailsRequestParams, {
+    axios.post( paymentDetailsURL, detailparams, {
         headers: headers
     }).then(response => {
-            res.json(response)
+        console.log(response.data.resultCode)
+        fs.readFile('items.json', function(error, data){
+            if(error) {
+                res.status(500).end()
+            } else {
+                res.render('store.ejs', {
+                    adyenClientKey: adyenClientKey,
+                    items: JSON.parse(data)
+                })
+            }
+        })
+            
     }).then(data => {
         console.log(data)
     }).catch(error => {
             console.log(error, 'charge fail');
      });
-    // fs.unlinkSync(`paymentData-luke_checkoutChallenge.json`)
+    fs.unlinkSync(`paymentData-luke_checkoutChallenge.json`)
 })
 
 
