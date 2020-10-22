@@ -84,60 +84,6 @@ app.post('/purchase', (req, res) => {
 })
 
 
-// app.post('/makePayment', (req, res) => {
-//     fs.readFile('items.json', (error, data) => {
-//         if(error) {
-//             res.status(500).end()
-//         } else {
-//             const itemsJson = JSON.parse(data)
-//             const itemsArray = itemsJson.music.concat(itemsJson.merch)
-//             let total = 0
-//             req.body.items.forEach(item => {
-//                 const itemJson = itemsArray.find(i => {
-//                   return i.id == item.id
-//                 })
-//                 return total = total + itemJson.price * item.quantity
-//             })
-
-//             const ip = (
-//                 req.headers['x-forwarded-for'] ||
-//                 req.connection.remoteAddress ||
-//                 req.socket.remoteAddress ||(req.connection.socket ? req.connection.socket.remoteAddress : null)
-//             );
-
-//             const { paymentMethod, browserInfo, billingAddress } = req.body.data
-//             const paymentRequestParams = {
-//                 merchantAccount: merchantName,
-//                 amount:{
-//                     "currency": "EUR",
-//                     "value": total
-//                 },
-//                 paymentMethod: paymentMethod,
-//                 reference:  'luke_checkoutChallenge',
-//                 returnUrl: 'http://localhost:5000/store',
-//                 channel: "Web",
-//                 countryCode: "NL",
-//                 //3d secure parameters
-//                 origin: 'http://localhost:5000/store' ,
-//                 browserInfo: browserInfo,
-//                 billingAddress: billingAddress,
-//                 shopperIP: ip,
-//                 redirectFromIssuerMethod: 'POST'
-//             }  
-//           
-
-//             axios.post( paymentsURL, paymentRequestParams, {
-//                 headers: headers
-//             }).then(response => {
-//                 res.json(response.data)
-//             }).catch(error => {
-//                 console.log(error, 'charge fail');
-//             });
-//         }
-//     })
-// }) 
-
-
 //Make a payment when customer clicks 'buy'
 app.post('/makePayment', (req, res) => {
     fs.readFile('items.json', (error, data) => {
@@ -206,7 +152,6 @@ app.post('/makePayment', (req, res) => {
 
 
 //after 3DS redierect
-
 app.post('/store', (req, res) => {
     const MD = req.body.MD;
     const PaRes = req.body.PaRes;
@@ -217,19 +162,14 @@ app.post('/store', (req, res) => {
             return data
         }
     })
-    
     const paymentData = pdata.replace(/["]+/g, '')
-
-       
+    
     const paymentDetailsRequestParams = {
         paymentData: paymentData,
         details: { MD: MD, PaRes: PaRes }
     }
-    // const reqParam = JSON.parse(paymentDetailsRequestParams)
 
     const detailparams = JSON.stringify(paymentDetailsRequestParams)
-
-    
     
     axios.post( paymentDetailsURL, detailparams, {
         headers: headers
@@ -239,22 +179,18 @@ app.post('/store', (req, res) => {
             if(error) {
                 res.status(500).end()
             } else {
-                res.render('store.ejs', {
+                res.render('confirmation.ejs', {
                     adyenClientKey: adyenClientKey,
                     items: JSON.parse(data)
                 })
             }
         })
             
-    }).then(data => {
-        console.log(data)
     }).catch(error => {
             console.log(error, 'charge fail');
      });
     fs.unlinkSync(`paymentData-luke_checkoutChallenge.json`)
 })
-
-
 
 
 
