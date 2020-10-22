@@ -174,7 +174,7 @@ app.post('/confirmation', (req, res) => {
         headers: headers
     }).then(response => {
         const result = response.data.resultCode
-        console.log(response.data.resultCode)
+        console.log(result)
         res.render('confirmation.ejs', {
                     result: result
         })     
