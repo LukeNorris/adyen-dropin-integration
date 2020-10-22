@@ -137,6 +137,7 @@ function adyenHandler (price){
         
         const checkout = new AdyenCheckout(configuration);
         const dropin = checkout.create('dropin').mount('#dropin-container');
+        checkout.createFromAction(action).mount('#my-container');
 
     }).catch(function(error) {
         console.error(error)
@@ -204,10 +205,10 @@ function showFinalResult (response) {
         case "Cancelled":
             document.getElementById('paymentCancelled').style.display = 'block'
           break;
-          case "Error":
+        case "Error":
             document.getElementById('paymentError').style.display = 'block'
           break;
-          case "Refused":
+        case "Refused":
             document.getElementById('paymentRefused').style.display = 'block'
           break;
         default:

@@ -3,6 +3,7 @@ import colors from 'colors'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import axios from 'axios'
+import bodyParser from 'body-parser'
 
 dotenv.config()
 
@@ -13,6 +14,10 @@ const merchantName = process.env.MERCHANT_ACCOUNT_NAME
 const paymentMethodsURL = 'https://checkout-test.adyen.com/v64/paymentMethods'
 const paymentsURL = 'https://checkout-test.adyen.com/v64/payments'
 const paymentDetailsURL = 'https://checkout-test.adyen.com/v64/payments/details'
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": adyenApiKey    
+}
 
 
 const app = express()
@@ -22,9 +27,12 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
 app.use(express.json())
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.set('trust proxy', true)
 
 
+//render products to frontend
 app.get('/store', (req, res) => {
     fs.readFile('items.json', function(error, data){
         if(error) {
@@ -39,6 +47,7 @@ app.get('/store', (req, res) => {
 })
 
 
+//get payment methods
 app.post('/purchase', (req, res) => {
     fs.readFile('items.json', (error, data) => {
         if(error) {
@@ -61,13 +70,10 @@ app.post('/purchase', (req, res) => {
                 channel: "Web",
                 countryCode: "NL"
             }  
-            const paymentMethodsHeaders = {
-                "Content-Type": "application/json",
-                "X-API-Key": adyenApiKey
-            }
+           
 
             axios.post( paymentMethodsURL, customerInfo, {
-                headers: paymentMethodsHeaders
+                headers: headers
             }).then(response => {
                 res.json(response.data)
             }).catch(error => {
@@ -118,13 +124,10 @@ app.post('/purchase', (req, res) => {
 //                 shopperIP: ip,
 //                 redirectFromIssuerMethod: 'POST'
 //             }  
-//             const paymentHeaders = {
-//                 "Content-Type": "application/json",
-//                 "X-API-Key": adyenApiKey
-//             }
+//           
 
 //             axios.post( paymentsURL, paymentRequestParams, {
-//                 headers: paymentHeaders
+//                 headers: headers
 //             }).then(response => {
 //                 res.json(response.data)
 //             }).catch(error => {
@@ -135,7 +138,7 @@ app.post('/purchase', (req, res) => {
 // }) 
 
 
-
+//Make a payment when customer clicks 'buy'
 app.post('/makePayment', (req, res) => {
     fs.readFile('items.json', (error, data) => {
         if(error) {
@@ -157,6 +160,8 @@ app.post('/makePayment', (req, res) => {
                 req.socket.remoteAddress ||(req.connection.socket ? req.connection.socket.remoteAddress : null)
             );
 
+            console.log('payments response', req.body)
+
             const { paymentMethod, browserInfo, billingAddress } = req.body.data
             const paymentRequestParams = {
                 merchantAccount: merchantName,
@@ -169,27 +174,25 @@ app.post('/makePayment', (req, res) => {
                 returnUrl: 'http://localhost:5000/store',
                 channel: "Web",
                 countryCode: "NL",
-                //3d secure parameters
                 origin: 'http://localhost:5000/store' ,
                 browserInfo: browserInfo,
                 billingAddress: billingAddress,
                 shopperIP: ip,
                 redirectFromIssuerMethod:'POST'
             }  
-            const paymentHeaders = {
-                "Content-Type": "application/json",
-                "X-API-Key": adyenApiKey
-            }
-
+           
             axios.post( paymentsURL, paymentRequestParams, {
-                headers: paymentHeaders
+                headers: headers
             }).then(response => {
                 if(response.data.action){
                     fs.writeFile(`paymentData-${paymentRequestParams.reference}.json`, 
-                    JSON.stringify(response.data.action.paymentData), 
+                    response.data.action.paymentData, 
                     function(err) {
-                        if (err) {console.log(err);}
+                        if (err) {
+                            console.log(err);
+                        }
                     });
+                    console.log('action to be taken',response.data.action)
                     res.json(response.data)
                 } else {
                 res.json(response.data)
@@ -202,60 +205,42 @@ app.post('/makePayment', (req, res) => {
 }) 
 
 
-// //after 3DS redierect
-// app.post('/store', (req, res) => {
-//     fs.readFile('items.json', function(error, data){
-//         if(error) {
-//             res.status(500).end()
-//         } else {
-//             console.log(req.body)
-//             res.render('store.ejs', {
-//                 adyenClientKey: adyenClientKey,
-//                 items: JSON.parse(data)
-//             })
-//         }
-//     })
+//after 3DS redierect
 
+app.post('/store', (req, res) => {
+    const MD = req.body.MD;
+    const PaRes = req.body.PaRes;
+    const dta =  fs.readFileSync("paymentData-luke_checkoutChallenge.json", 'utf-8', (error, dta) => {
+        if(error) {
+            res.status(500).end()
+        } else {
+            return JSON.parse(dta)
+        }
+    })
+    
+    // const paymentData = dta.substr(0,dta.length -1)
+       
+    const paymentDetailsRequestParams = {
+        details: { MD: MD, PaRes: PaRes },
+        paymentData: dta
+    }
 
-//     req.
+    
 
-//     try {
-//         console.log(decodeURI(encoded));
-//         // expected output: "https://mozilla.org/?x=шеллы"
-//       } catch (e) { // catches a malformed URI
-//         console.error(e);
-//       }
+    
+    
+    axios.post( paymentDetailsURL, paymentDetailsRequestParams, {
+        headers: headers
+    }).then(response => {
+            res.json(response)
+    }).then(data => {
+        console.log(data)
+    }).catch(error => {
+            console.log(error, 'charge fail');
+     });
+    // fs.unlinkSync(`paymentData-luke_checkoutChallenge.json`)
+})
 
-//     let paymentData =  fs.readFile(`paymentData-luke_checkoutChallenge.json`, (error, data) => {
-//         if(error) {
-//             res.status(500).end()
-//         } else {
-//             return JSON.parse(data)
-//         }
-//     })
-            
-//     const paymentDetailsRequestParams = {
-//         "paymentData": paymentData,
-//         "details": {
-//           "MD": "Ab02b4c0!BQABAgCW5sxB4e/==...",
-//           "PaRes": "eNrNV0mTo7gS..."
-//         }
-//       }
-
-//     const paymentDetailsHeaders = {
-//         "Content-Type": "application/json",
-//         "X-API-Key": adyenApiKey
-//     }
-//     axios.post( paymentDetailsURL, paymentDetailsRequestParams, {
-//         headers: paymentDetailsHeaders
-//     }).then(response => {
-//             res.json(response.data)
-//             console.log(paymentDetailsRequestParams)
-//         }).catch(error => {
-//             console.log(error, 'charge fail');
-//         });
-//     fs.unlinkSync(`paymentData-luke_checkoutChallenge.json`)
-// })
 
 
 
