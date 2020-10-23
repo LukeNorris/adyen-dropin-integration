@@ -34,7 +34,7 @@ function showFinalResult (result) {
 function messageTimeout () {
     setTimeout(() => {      
         window.location = 'http://localhost:5000'      
-    }, 5000); 
+    }, 4000); 
 }
 
 function makeScreenUnclickable() {

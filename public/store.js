@@ -233,7 +233,7 @@ function makeScreenUnclickable() {
 function messageTimeout () {
     setTimeout(() => {      
         window.location = 'http://localhost:5000'      
-    }, 5000); 
+    }, 4000); 
 }
 
 
