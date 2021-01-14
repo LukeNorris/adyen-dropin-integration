@@ -115,7 +115,7 @@ app.post('/makePayment', (req, res) => {
                     "value": total
                 },
                 paymentMethod: paymentMethod,
-                reference:  'luke_checkoutChallenge',
+                reference:  "luke's test shop",
                 returnUrl: 'http://localhost:5000/confirmation',
                 channel: "Web",
                 countryCode: "NL",
