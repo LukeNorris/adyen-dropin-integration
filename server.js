@@ -115,7 +115,7 @@ app.post('/makePayment', (req, res) => {
                     "value": total
                 },
                 paymentMethod: paymentMethod,
-                reference:  "luke's test shop",
+                reference:  "lukes_test_shop",
                 returnUrl: 'http://localhost:5000/confirmation',
                 channel: "Web",
                 countryCode: "NL",
@@ -154,7 +154,7 @@ app.post('/makePayment', (req, res) => {
 app.post('/confirmation', (req, res) => {
     const MD = req.body.MD;
     const PaRes = req.body.PaRes;
-    const pdata =  fs.readFileSync("paymentData-luke_checkoutChallenge.json", 'utf-8', (error, data) => {
+    const pdata =  fs.readFileSync("paymentData-lukes_test_shop.json", 'utf-8', (error, data) => {
         if(error) {
             res.status(500).end()
         } else {
@@ -181,7 +181,7 @@ app.post('/confirmation', (req, res) => {
     }).catch(error => {
             console.log(error, 'charge fail');
      });
-    fs.unlinkSync(`paymentData-luke_checkoutChallenge.json`)
+    fs.unlinkSync(`paymentData-lukes_test_shop.json`)
 })
 
 
