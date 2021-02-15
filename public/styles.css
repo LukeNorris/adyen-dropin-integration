@@ -487,4 +487,24 @@ html, body {
     width: 40%;
     font-weight: 900;
     border-radius: 6px;
+    display: none;
+}
+.adyen-checkout__input {
+    border-radius: 6px;
+}
+
+.adyen-checkout__payment-method {
+    border-radius: 6px;
+}
+
+#btn-pay{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background-color: #29ffff;
+    margin: auto;
+    width: 40%;
+    font-weight: 900;
+    border-radius: 6px;
 }

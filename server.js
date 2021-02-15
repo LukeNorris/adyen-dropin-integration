@@ -68,7 +68,7 @@ app.post('/purchase', (req, res) => {
                 merchantAccount: merchantName,
                 amount:[total],
                 channel: "Web",
-                countryCode: "NL"
+                countryCode: "DE"
             }  
            
             axios.post( paymentMethodsURL, customerInfo, {
@@ -102,7 +102,8 @@ app.post('/makePayment', (req, res) => {
             const ip = (
                 req.headers['x-forwarded-for'] ||
                 req.connection.remoteAddress ||
-                req.socket.remoteAddress ||(req.connection.socket ? req.connection.socket.remoteAddress : null)
+                req.socket.remoteAddress ||
+                (req.connection.socket ? req.connection.socket.remoteAddress : null)
             );
 
             console.log('payments response', req.body)

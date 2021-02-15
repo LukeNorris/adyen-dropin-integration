@@ -136,12 +136,17 @@ function adyenHandler (price){
            };
         
         const checkout = new AdyenCheckout(configuration);
-        const dropin = checkout.create('dropin').mount('#dropin-container');
-        
+          dropin = checkout.create('dropin').mount('#dropin-container');
 
     }).catch(function(error) {
         console.error(error)
     })
+}
+
+//Custom pay button. To access the dropin instance I had to make it a global variable above
+document.getElementById('btn-pay').addEventListener('click', payClicked)
+function payClicked(){
+    dropin.submit()
 }
 
 
@@ -159,6 +164,11 @@ document.getElementById('paymentCancelled').style.display = 'none'
 document.getElementById('paymentError').style.display = 'none'
 document.getElementById('paymentRefused').style.display = 'none'
 document.getElementById('paymentTimeout').style.display = 'none'
+
+
+
+
+
 
 // When the user clicks on <span> (x), close the modal
 var span = document.getElementsByClassName("close")[0];
